@@ -86,12 +86,13 @@ export default function KnowledgeGraph({ entries, onNodeClick }: {
           linkColor={() => 'rgba(113,113,122,0.3)'}
           linkWidth={1}
           backgroundColor="#09090b"
-          onNodeClick={(node: GraphNode) => onNodeClick(node.id)}
+          onNodeClick={(node) => onNodeClick((node as GraphNode).id)}
           cooldownTicks={80}
-          nodePointerAreaPaint={(node: GraphNode & { x?: number; y?: number }, color, ctx) => {
+          nodePointerAreaPaint={(node, color, ctx) => {
+            const n = node as GraphNode & { x?: number; y?: number }
             ctx.fillStyle = color
             ctx.beginPath()
-            ctx.arc(node.x ?? 0, node.y ?? 0, 8, 0, 2 * Math.PI)
+            ctx.arc(n.x ?? 0, n.y ?? 0, 8, 0, 2 * Math.PI)
             ctx.fill()
           }}
         />
