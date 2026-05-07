@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
   Buildings,
@@ -9,8 +9,8 @@ import {
   ChatCircle,
   Package,
   ArrowLeft,
+  CircleNotch,
 } from '@phosphor-icons/react'
-import { allProjects } from '@/lib/demo-data'
 import type { Project } from '@/lib/types'
 import ProjectSelector from './ProjectSelector'
 import BuildingMap from './BuildingMap'
@@ -30,8 +30,17 @@ const TABS = [
 type TabId = (typeof TABS)[number]['id']
 
 export default function FieldPage() {
+  const [projects, setProjects] = useState<Project[]>([])
+  const [loading, setLoading] = useState(true)
   const [selectedProject, setSelectedProject] = useState<Project | null>(null)
   const [activeTab, setActiveTab] = useState<TabId>('building')
+
+  useEffect(() => {
+    fetch('/api/field/projects')
+      .then(r => r.json())
+      .then(data => setProjects(data.projects ?? []))
+      .finally(() => setLoading(false))
+  }, [])
 
   const handleSelectProject = (project: Project) => {
     setSelectedProject(project)
@@ -40,6 +49,13 @@ export default function FieldPage() {
 
   const handleBack = () => {
     setSelectedProject(null)
+  }
+
+  const handleResolveBlocker = (id: string) => {
+    setSelectedProject(prev => prev ? {
+      ...prev,
+      blockers: prev.blockers.filter(b => b.id !== id),
+    } : null)
   }
 
   return (
@@ -54,7 +70,13 @@ export default function FieldPage() {
             transition={{ duration: 0.18 }}
             className="flex-1 overflow-hidden"
           >
-            <ProjectSelector projects={allProjects} onSelect={handleSelectProject} />
+            {loading ? (
+              <div className="flex items-center justify-center h-full">
+                <CircleNotch size={20} className="text-zinc-600 animate-spin" />
+              </div>
+            ) : (
+              <ProjectSelector projects={projects} onSelect={handleSelectProject} />
+            )}
           </motion.div>
         ) : (
           <motion.div
@@ -156,7 +178,7 @@ export default function FieldPage() {
                   >
                     {activeTab === 'building' && <BuildingMap project={selectedProject} />}
                     {activeTab === 'plan' && <WeeklyPlan project={selectedProject} />}
-                    {activeTab === 'blockers' && <BlockersView project={selectedProject} />}
+                    {activeTab === 'blockers' && <BlockersView project={selectedProject} onResolveBlocker={handleResolveBlocker} />}
                     {activeTab === 'ask' && <AskView project={selectedProject} />}
                     {activeTab === 'materials' && <MaterialsView project={selectedProject} />}
                   </motion.div>

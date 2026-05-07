@@ -16,9 +16,10 @@ const TYPE_LABELS: Record<BlockerType, string> = {
 
 interface BlockersViewProps {
   project: Project
+  onResolveBlocker?: (id: string) => void
 }
 
-export default function BlockersView({ project }: BlockersViewProps) {
+export default function BlockersView({ project, onResolveBlocker }: BlockersViewProps) {
   const [resolvedIds, setResolvedIds] = useState<string[]>([])
   const [filter, setFilter] = useState<BlockerType | 'all'>('all')
 
@@ -44,8 +45,10 @@ export default function BlockersView({ project }: BlockersViewProps) {
     return names
   }
 
-  const resolve = (id: string) => {
+  const resolve = async (id: string) => {
     setResolvedIds(prev => [...prev, id])
+    onResolveBlocker?.(id)
+    await fetch(`/api/field/blockers/${id}`, { method: 'PATCH' })
   }
 
   return (
