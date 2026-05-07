@@ -115,7 +115,7 @@ async function callGPT(system: string, messages: ChatMessage[]): Promise<string>
 }
 
 async function callGemini(system: string, messages: ChatMessage[]): Promise<string> {
-  const model = geminiClient.getGenerativeModel({ model: 'gemini-1.5-flash' })
+  const model = geminiClient.getGenerativeModel({ model: 'gemini-2.5-flash' })
   const history = messages.slice(0, -1).map(m => ({
     role: m.role === 'assistant' ? 'model' : 'user',
     parts: [{ text: m.content }],
