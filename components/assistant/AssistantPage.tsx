@@ -249,7 +249,23 @@ export default function AssistantPage() {
     setLoading(false)
   }
 
-  const clear = () => setMessages([])
+  const clear = async () => {
+    if (messages.length < 2) { setMessages([]); return }
+    // Save a summary of the session to raw_captures before clearing
+    const transcript = messages
+      .map(m => `${m.role === 'user' ? 'Mitch' : 'Assistant'}: ${m.content || (m.council ? '[Council response]' : '[Debate response]')}`)
+      .join('\n')
+    fetch('/api/brain/raw', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        type: 'Session',
+        content: `Assistant session (${new Date().toLocaleDateString()}, ${messages.length} messages):\n\n${transcript.slice(0, 2000)}`,
+        source: 'assistant',
+      }),
+    }).catch(() => null)
+    setMessages([])
+  }
 
   return (
     <div className="flex h-full flex-col">
