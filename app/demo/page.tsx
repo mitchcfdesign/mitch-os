@@ -31,17 +31,25 @@ const TASKS = [
   { title: 'Push Richardson Electric proposal', status: 'blocked', priority: 'high' },
 ]
 
-// accent: #f97316 (orange-500) — warm, premium, distinct from amber
 const A = '#f97316'
 const A2 = '#fb923c'
-const A_DIM = 'rgba(249,115,22,0.18)'
-const A_BORDER = 'rgba(249,115,22,0.28)'
+const A_DIM = 'rgba(249,115,22,0.15)'
+const A_BORDER = 'rgba(249,115,22,0.25)'
 
 function statusIcon(s: string) {
   if (s === 'done') return <CheckCircle size={12} weight="fill" style={{ color: A }} />
   if (s === 'in_progress') return <Clock size={12} weight="fill" style={{ color: A2 }} />
   if (s === 'blocked') return <Warning size={12} weight="fill" className="text-rose-400" />
   return <Circle size={12} style={{ color: 'rgba(120,113,108,0.6)' }} />
+}
+
+function SectionLabel({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <div className="flex items-center gap-2 mb-1">
+      <span style={{ color: A }}>{icon}</span>
+      <span className="text-xs font-medium" style={{ color: 'rgba(168,162,158,0.6)' }}>{label}</span>
+    </div>
+  )
 }
 
 export default function DemoPage() {
@@ -54,12 +62,11 @@ export default function DemoPage() {
     >
       {/* Sidebar */}
       <aside
-        className="hidden md:flex flex-col w-52 shrink-0 py-6 px-3 gap-1"
+        className="hidden md:flex flex-col w-52 shrink-0 py-6 px-3 gap-0.5"
         style={{ borderRight: '1px solid rgba(255,255,255,0.05)' }}
       >
-        <div className="px-3 mb-5">
-          <span className="font-mono text-[10px] tracking-widest uppercase"
-            style={{ color: 'rgba(168,162,158,0.35)' }}>
+        <div className="px-3 mb-6">
+          <span className="text-sm font-semibold tracking-tight" style={{ color: 'rgba(231,229,228,0.5)' }}>
             Mitch OS
           </span>
         </div>
@@ -67,18 +74,16 @@ export default function DemoPage() {
           <button
             key={label}
             onClick={() => setActive(label)}
-            className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-xs font-mono tracking-wider transition-all duration-200"
+            className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
             style={{
-              color: active === label ? '#fafaf9' : 'rgba(168,162,158,0.45)',
-              background: active === label
-                ? 'rgba(249,115,22,0.1)'
-                : 'transparent',
+              color: active === label ? '#fafaf9' : 'rgba(168,162,158,0.5)',
+              background: active === label ? A_DIM : 'transparent',
               border: active === label ? `1px solid ${A_BORDER}` : '1px solid transparent',
               boxShadow: active === label ? 'inset 0 1px 0 rgba(255,255,255,0.05)' : 'none',
             }}
           >
             <span style={{ color: active === label ? A : 'rgba(120,113,108,0.5)' }}>{icon}</span>
-            <span className="uppercase">{label}</span>
+            {label}
             {active === label && (
               <motion.div
                 layoutId="glow"
@@ -109,18 +114,17 @@ export default function DemoPage() {
           >
             <div className="flex items-start justify-between">
               <div>
-                <p className="text-[10px] font-mono uppercase tracking-widest"
-                  style={{ color: 'rgba(168,162,158,0.4)' }}>
-                  Wednesday, May 7, 2026
+                <p className="text-xs font-medium" style={{ color: 'rgba(168,162,158,0.4)' }}>
+                  Wednesday, May 7
                 </p>
-                <h1 className="text-lg font-semibold mt-0.5" style={{ color: '#fafaf9' }}>
+                <h1 className="text-xl font-semibold tracking-tight mt-0.5" style={{ color: '#fafaf9' }}>
                   Good morning, Mitch
                 </h1>
               </div>
               <div className="w-8 h-8 rounded-xl flex items-center justify-center"
                 style={{
                   background: `linear-gradient(135deg, ${A}, ${A2})`,
-                  boxShadow: `0 0 16px rgba(249,115,22,0.35)`,
+                  boxShadow: `0 0 16px rgba(249,115,22,0.3)`,
                 }}>
                 <Lightning size={15} weight="fill" className="text-white" />
               </div>
@@ -134,8 +138,8 @@ export default function DemoPage() {
               ].map(({ label, value, bg, border, color }) => (
                 <div key={label} className="rounded-xl p-3 text-center"
                   style={{ background: bg, border: `1px solid ${border}` }}>
-                  <p className="text-2xl font-mono font-bold" style={{ color }}>{value}</p>
-                  <p className="text-[10px] font-mono mt-0.5" style={{ color: 'rgba(168,162,158,0.5)' }}>{label}</p>
+                  <p className="text-2xl font-bold font-mono" style={{ color }}>{value}</p>
+                  <p className="text-xs font-medium mt-0.5" style={{ color: 'rgba(168,162,158,0.5)' }}>{label}</p>
                 </div>
               ))}
             </div>
@@ -144,14 +148,14 @@ export default function DemoPage() {
               {TASKS.slice(0, 3).map(task => (
                 <div key={task.title} className="flex items-center gap-2.5 py-1.5">
                   {statusIcon(task.status)}
-                  <span className="text-xs flex-1 truncate" style={{ color: 'rgba(231,229,228,0.8)' }}>
+                  <span className="text-sm flex-1 truncate" style={{ color: 'rgba(231,229,228,0.8)' }}>
                     {task.title}
                   </span>
                   {task.priority === 'high' && (
                     <div className="flex items-center gap-1 rounded-md px-1.5 py-0.5"
                       style={{ background: 'rgba(244,63,94,0.08)', border: '1px solid rgba(244,63,94,0.18)' }}>
                       <ArrowUp size={9} className="text-rose-400" />
-                      <span className="text-[9px] font-mono text-rose-400">high</span>
+                      <span className="text-[10px] font-medium text-rose-400">high</span>
                     </div>
                   )}
                 </div>
@@ -172,17 +176,13 @@ export default function DemoPage() {
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
             }}
           >
-            <div className="flex items-center gap-2">
-              <Sparkle size={13} weight="fill" style={{ color: A }} />
-              <span className="text-[10px] font-mono uppercase tracking-widest"
-                style={{ color: 'rgba(168,162,158,0.45)' }}>For You</span>
-            </div>
+            <SectionLabel icon={<Sparkle size={13} weight="fill" />} label="For You" />
             {[
               '3 tasks in progress. You have momentum.',
               '"Launch Mitch OS v2" is at 82% — one push and it\'s done.',
               '2 recent captures waiting to be organized.',
             ].map((text, i) => (
-              <div key={i} className="p-3 rounded-xl text-xs leading-relaxed"
+              <div key={i} className="p-3 rounded-xl text-sm leading-relaxed"
                 style={{
                   background: 'rgba(255,255,255,0.025)',
                   border: '1px solid rgba(255,255,255,0.05)',
@@ -206,11 +206,7 @@ export default function DemoPage() {
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
             }}
           >
-            <div className="flex items-center gap-2">
-              <Target size={13} weight="fill" style={{ color: A }} />
-              <span className="text-[10px] font-mono uppercase tracking-widest"
-                style={{ color: 'rgba(168,162,158,0.45)' }}>Goals</span>
-            </div>
+            <SectionLabel icon={<Target size={13} weight="fill" />} label="Goals" />
             {GOALS.map((goal, i) => (
               <motion.div
                 key={goal.title}
@@ -220,10 +216,10 @@ export default function DemoPage() {
                 className="space-y-1.5"
               >
                 <div className="flex items-center justify-between">
-                  <span className="text-xs flex-1 truncate" style={{ color: 'rgba(231,229,228,0.85)' }}>
+                  <span className="text-sm flex-1 truncate" style={{ color: 'rgba(231,229,228,0.85)' }}>
                     {goal.title}
                   </span>
-                  <span className="text-[10px] font-mono ml-2" style={{ color: 'rgba(168,162,158,0.4)' }}>
+                  <span className="text-xs font-mono ml-2" style={{ color: 'rgba(168,162,158,0.4)' }}>
                     {goal.progress}%
                   </span>
                 </div>
@@ -233,7 +229,7 @@ export default function DemoPage() {
                     animate={{ width: `${goal.progress}%` }}
                     transition={{ duration: 0.7, delay: 0.3 + i * 0.06 }}
                     className="h-full rounded-full"
-                    style={{ background: `linear-gradient(90deg, ${goal.color}99, ${goal.color})` }}
+                    style={{ background: `linear-gradient(90deg, ${goal.color}88, ${goal.color})` }}
                   />
                 </div>
               </motion.div>
@@ -253,16 +249,12 @@ export default function DemoPage() {
               boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
             }}
           >
-            <div className="flex items-center gap-2 mb-3">
-              <CheckSquare size={13} weight="fill" style={{ color: A }} />
-              <span className="text-[10px] font-mono uppercase tracking-widest"
-                style={{ color: 'rgba(168,162,158,0.45)' }}>Tasks</span>
-            </div>
+            <SectionLabel icon={<CheckSquare size={13} weight="fill" />} label="Tasks" />
             {TASKS.map(task => (
               <div key={task.title} className="flex items-center gap-2 py-1.5"
                 style={{ borderBottom: '1px solid rgba(255,255,255,0.035)' }}>
                 {statusIcon(task.status)}
-                <span className="text-xs flex-1 truncate"
+                <span className="text-sm flex-1 truncate"
                   style={{ color: task.status === 'done' ? 'rgba(120,113,108,0.4)' : 'rgba(214,211,209,0.7)' }}>
                   {task.title}
                 </span>
@@ -285,14 +277,14 @@ export default function DemoPage() {
           >
             <div className="w-10 h-10 rounded-2xl flex items-center justify-center"
               style={{
-                background: `linear-gradient(135deg, rgba(249,115,22,0.22), rgba(251,146,60,0.14))`,
+                background: `linear-gradient(135deg, rgba(249,115,22,0.2), rgba(251,146,60,0.12))`,
                 border: `1px solid ${A_BORDER}`,
               }}>
               <Brain size={18} weight="duotone" style={{ color: A }} />
             </div>
             <div>
               <p className="text-sm font-semibold" style={{ color: '#fafaf9' }}>2 captures</p>
-              <p className="text-[10px] font-mono mt-0.5" style={{ color: 'rgba(168,162,158,0.4)' }}>
+              <p className="text-xs font-medium mt-0.5" style={{ color: 'rgba(168,162,158,0.4)' }}>
                 waiting to organize
               </p>
             </div>
@@ -308,7 +300,7 @@ export default function DemoPage() {
         className="fixed bottom-8 right-6 z-40 w-12 h-12 rounded-full flex items-center justify-center"
         style={{
           background: `linear-gradient(135deg, ${A}, ${A2})`,
-          boxShadow: `0 0 24px rgba(249,115,22,0.45), 0 4px 16px rgba(0,0,0,0.4)`,
+          boxShadow: `0 0 24px rgba(249,115,22,0.4), 0 4px 16px rgba(0,0,0,0.4)`,
         }}
       >
         <Brain size={20} weight="fill" className="text-white" />
