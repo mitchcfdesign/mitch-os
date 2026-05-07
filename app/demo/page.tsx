@@ -1,7 +1,7 @@
 'use client'
 
 import { useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, AnimatePresence } from 'framer-motion'
 import {
   SquaresFour, HardHat, BookOpen, Target, CheckSquare,
   Path, Lightning, Brain, Sparkle, Circle, Clock,
@@ -9,19 +9,19 @@ import {
 } from '@phosphor-icons/react'
 
 const NAV = [
-  { label: 'Dashboard', icon: <SquaresFour size={18} weight="fill" /> },
-  { label: 'Field', icon: <HardHat size={18} weight="fill" /> },
-  { label: 'Ask', icon: <Lightning size={18} weight="fill" /> },
-  { label: 'Goals', icon: <Target size={18} weight="fill" /> },
-  { label: 'Tasks', icon: <CheckSquare size={18} weight="fill" /> },
-  { label: 'Knowledge', icon: <BookOpen size={18} weight="fill" /> },
-  { label: 'Journey', icon: <Path size={18} weight="fill" /> },
+  { label: 'Dashboard', icon: <SquaresFour size={16} weight="fill" /> },
+  { label: 'Field', icon: <HardHat size={16} weight="fill" /> },
+  { label: 'Ask', icon: <Lightning size={16} weight="fill" /> },
+  { label: 'Goals', icon: <Target size={16} weight="fill" /> },
+  { label: 'Tasks', icon: <CheckSquare size={16} weight="fill" /> },
+  { label: 'Knowledge', icon: <BookOpen size={16} weight="fill" /> },
+  { label: 'Journey', icon: <Path size={16} weight="fill" /> },
 ]
 
 const GOALS = [
-  { title: 'Launch Mitch OS v2', progress: 82, color: '#f97316' },
-  { title: 'Royal Built payroll SaaS', progress: 41, color: '#fb923c' },
-  { title: 'YouTube — first 10 videos', progress: 20, color: '#fdba74' },
+  { title: 'Launch Mitch OS v2', progress: 82 },
+  { title: 'Royal Built payroll SaaS', progress: 41 },
+  { title: 'YouTube — first 10 videos', progress: 20 },
 ]
 
 const TASKS = [
@@ -31,276 +31,211 @@ const TASKS = [
   { title: 'Push Richardson Electric proposal', status: 'blocked', priority: 'high' },
 ]
 
-const A = '#f97316'
-const A2 = '#fb923c'
-const A_DIM = 'rgba(249,115,22,0.15)'
-const A_BORDER = 'rgba(249,115,22,0.25)'
-
 function statusIcon(s: string) {
-  if (s === 'done') return <CheckCircle size={12} weight="fill" style={{ color: A }} />
-  if (s === 'in_progress') return <Clock size={12} weight="fill" style={{ color: A2 }} />
-  if (s === 'blocked') return <Warning size={12} weight="fill" className="text-rose-400" />
-  return <Circle size={12} style={{ color: 'rgba(120,113,108,0.6)' }} />
-}
-
-function SectionLabel({ icon, label }: { icon: React.ReactNode; label: string }) {
-  return (
-    <div className="flex items-center gap-2 mb-1">
-      <span style={{ color: A }}>{icon}</span>
-      <span className="text-xs font-medium" style={{ color: 'rgba(168,162,158,0.6)' }}>{label}</span>
-    </div>
-  )
+  if (s === 'done') return <CheckCircle size={14} weight="fill" style={{ color: 'rgba(255,255,255,0.9)' }} />
+  if (s === 'in_progress') return <Clock size={14} weight="fill" style={{ color: '#f97316' }} />
+  if (s === 'blocked') return <Warning size={14} weight="fill" style={{ color: 'rgba(255,255,255,0.35)' }} />
+  return <Circle size={14} style={{ color: 'rgba(255,255,255,0.18)' }} />
 }
 
 export default function DemoPage() {
   const [active, setActive] = useState('Dashboard')
 
   return (
-    <div
-      className="flex min-h-[100dvh]"
-      style={{ background: 'linear-gradient(150deg, #0e0b08 0%, #110e0a 55%, #0f0c0b 100%)' }}
-    >
+    <div className="flex min-h-[100dvh]" style={{ background: '#080808' }}>
+
       {/* Sidebar */}
-      <aside
-        className="hidden md:flex flex-col w-52 shrink-0 py-6 px-3 gap-0.5"
-        style={{ borderRight: '1px solid rgba(255,255,255,0.05)' }}
-      >
-        <div className="px-3 mb-6">
-          <span className="text-sm font-semibold tracking-tight" style={{ color: 'rgba(231,229,228,0.5)' }}>
+      <aside className="hidden md:flex flex-col w-56 shrink-0 py-8 px-4">
+        <div className="px-2 mb-8">
+          <span className="text-sm font-semibold" style={{ color: 'rgba(255,255,255,0.9)' }}>
             Mitch OS
           </span>
         </div>
-        {NAV.map(({ label, icon }) => (
-          <button
-            key={label}
-            onClick={() => setActive(label)}
-            className="relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200"
-            style={{
-              color: active === label ? '#fafaf9' : 'rgba(168,162,158,0.5)',
-              background: active === label ? A_DIM : 'transparent',
-              border: active === label ? `1px solid ${A_BORDER}` : '1px solid transparent',
-              boxShadow: active === label ? 'inset 0 1px 0 rgba(255,255,255,0.05)' : 'none',
-            }}
-          >
-            <span style={{ color: active === label ? A : 'rgba(120,113,108,0.5)' }}>{icon}</span>
-            {label}
-            {active === label && (
-              <motion.div
-                layoutId="glow"
-                className="absolute left-0 inset-y-0 w-0.5 rounded-full"
-                style={{ background: `linear-gradient(to bottom, ${A}, ${A2})` }}
-              />
-            )}
-          </button>
-        ))}
+        <nav className="flex flex-col gap-0.5">
+          {NAV.map(({ label, icon }) => (
+            <button
+              key={label}
+              onClick={() => setActive(label)}
+              className="relative flex items-center gap-2.5 px-3 py-2 rounded-lg text-sm transition-all duration-150"
+              style={{
+                color: active === label ? 'rgba(255,255,255,0.95)' : 'rgba(255,255,255,0.38)',
+                background: active === label ? 'rgba(255,255,255,0.08)' : 'transparent',
+                fontWeight: active === label ? 500 : 400,
+              }}
+            >
+              {icon}
+              {label}
+            </button>
+          ))}
+        </nav>
       </aside>
 
       {/* Main */}
-      <div className="flex-1 overflow-y-auto p-5 md:p-7">
-        <div className="max-w-[1300px] mx-auto grid grid-cols-1 md:grid-cols-12 gap-4">
+      <main className="flex-1 overflow-y-auto py-10 px-8">
+        <div className="max-w-3xl mx-auto space-y-10">
 
-          {/* Daily Huddle */}
+          {/* Header */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.05 }}
-            className="md:col-span-8 rounded-2xl p-5 space-y-4"
-            style={{
-              background: 'rgba(20,16,12,0.85)',
-              backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255,255,255,0.06)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04), 0 4px 32px rgba(0,0,0,0.5)',
-            }}
+            transition={{ duration: 0.4 }}
           >
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-xs font-medium" style={{ color: 'rgba(168,162,158,0.4)' }}>
-                  Wednesday, May 7
-                </p>
-                <h1 className="text-xl font-semibold tracking-tight mt-0.5" style={{ color: '#fafaf9' }}>
-                  Good morning, Mitch
-                </h1>
-              </div>
-              <div className="w-8 h-8 rounded-xl flex items-center justify-center"
-                style={{
-                  background: `linear-gradient(135deg, ${A}, ${A2})`,
-                  boxShadow: `0 0 16px rgba(249,115,22,0.3)`,
-                }}>
-                <Lightning size={15} weight="fill" className="text-white" />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-3 gap-3">
-              {[
-                { label: 'To Do', value: 5, bg: 'rgba(255,255,255,0.03)', border: 'rgba(255,255,255,0.06)', color: '#e7e5e4' },
-                { label: 'In Progress', value: 3, bg: A_DIM, border: A_BORDER, color: A },
-                { label: 'Blocked', value: 1, bg: 'rgba(244,63,94,0.07)', border: 'rgba(244,63,94,0.18)', color: '#fb7185' },
-              ].map(({ label, value, bg, border, color }) => (
-                <div key={label} className="rounded-xl p-3 text-center"
-                  style={{ background: bg, border: `1px solid ${border}` }}>
-                  <p className="text-2xl font-bold font-mono" style={{ color }}>{value}</p>
-                  <p className="text-xs font-medium mt-0.5" style={{ color: 'rgba(168,162,158,0.5)' }}>{label}</p>
-                </div>
-              ))}
-            </div>
-
-            <div className="space-y-1">
-              {TASKS.slice(0, 3).map(task => (
-                <div key={task.title} className="flex items-center gap-2.5 py-1.5">
-                  {statusIcon(task.status)}
-                  <span className="text-sm flex-1 truncate" style={{ color: 'rgba(231,229,228,0.8)' }}>
-                    {task.title}
-                  </span>
-                  {task.priority === 'high' && (
-                    <div className="flex items-center gap-1 rounded-md px-1.5 py-0.5"
-                      style={{ background: 'rgba(244,63,94,0.08)', border: '1px solid rgba(244,63,94,0.18)' }}>
-                      <ArrowUp size={9} className="text-rose-400" />
-                      <span className="text-[10px] font-medium text-rose-400">high</span>
-                    </div>
-                  )}
-                </div>
-              ))}
-            </div>
+            <p className="text-sm mb-1" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              Wednesday, May 7
+            </p>
+            <h1 className="text-3xl font-semibold tracking-tight" style={{ color: 'rgba(255,255,255,0.95)' }}>
+              Good morning, Mitch.
+            </h1>
           </motion.div>
 
-          {/* For You */}
+          {/* Stats row — no boxes, just numbers */}
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.1 }}
-            className="md:col-span-4 rounded-2xl p-5 space-y-3"
-            style={{
-              background: 'rgba(18,14,10,0.8)',
-              backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255,255,255,0.05)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
-            }}
+            transition={{ duration: 0.4, delay: 0.06 }}
+            className="flex gap-10"
           >
-            <SectionLabel icon={<Sparkle size={13} weight="fill" />} label="For You" />
             {[
-              '3 tasks in progress. You have momentum.',
-              '"Launch Mitch OS v2" is at 82% — one push and it\'s done.',
-              '2 recent captures waiting to be organized.',
-            ].map((text, i) => (
-              <div key={i} className="p-3 rounded-xl text-sm leading-relaxed"
-                style={{
-                  background: 'rgba(255,255,255,0.025)',
-                  border: '1px solid rgba(255,255,255,0.05)',
-                  color: 'rgba(214,211,209,0.75)',
-                }}>
-                {text}
+              { label: 'To do', value: '5', muted: false },
+              { label: 'In progress', value: '3', accent: true },
+              { label: 'Blocked', value: '1', muted: true },
+            ].map(({ label, value, accent, muted }) => (
+              <div key={label}>
+                <p className="text-4xl font-semibold tracking-tight"
+                  style={{ color: accent ? '#f97316' : muted ? 'rgba(255,255,255,0.28)' : 'rgba(255,255,255,0.9)' }}>
+                  {value}
+                </p>
+                <p className="text-xs mt-1 font-medium" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                  {label}
+                </p>
               </div>
             ))}
           </motion.div>
 
-          {/* Goals */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-            className="md:col-span-5 rounded-2xl p-5 space-y-4"
-            style={{
-              background: 'rgba(18,14,10,0.8)',
-              backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255,255,255,0.05)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
-            }}
-          >
-            <SectionLabel icon={<Target size={13} weight="fill" />} label="Goals" />
-            {GOALS.map((goal, i) => (
-              <motion.div
-                key={goal.title}
-                initial={{ opacity: 0, x: -4 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.2 + i * 0.06 }}
-                className="space-y-1.5"
-              >
-                <div className="flex items-center justify-between">
-                  <span className="text-sm flex-1 truncate" style={{ color: 'rgba(231,229,228,0.85)' }}>
-                    {goal.title}
-                  </span>
-                  <span className="text-xs font-mono ml-2" style={{ color: 'rgba(168,162,158,0.4)' }}>
-                    {goal.progress}%
-                  </span>
-                </div>
-                <div className="h-1 rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.05)' }}>
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${goal.progress}%` }}
-                    transition={{ duration: 0.7, delay: 0.3 + i * 0.06 }}
-                    className="h-full rounded-full"
-                    style={{ background: `linear-gradient(90deg, ${goal.color}88, ${goal.color})` }}
-                  />
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+          {/* Divider */}
+          <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
 
           {/* Tasks */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
+          <motion.section
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.18 }}
-            className="md:col-span-4 rounded-2xl p-5 space-y-2"
-            style={{
-              background: 'rgba(18,14,10,0.8)',
-              backdropFilter: 'blur(16px)',
-              border: '1px solid rgba(255,255,255,0.05)',
-              boxShadow: 'inset 0 1px 0 rgba(255,255,255,0.04)',
-            }}
+            transition={{ duration: 0.4, delay: 0.1 }}
           >
-            <SectionLabel icon={<CheckSquare size={13} weight="fill" />} label="Tasks" />
-            {TASKS.map(task => (
-              <div key={task.title} className="flex items-center gap-2 py-1.5"
-                style={{ borderBottom: '1px solid rgba(255,255,255,0.035)' }}>
-                {statusIcon(task.status)}
-                <span className="text-sm flex-1 truncate"
-                  style={{ color: task.status === 'done' ? 'rgba(120,113,108,0.4)' : 'rgba(214,211,209,0.7)' }}>
-                  {task.title}
-                </span>
-              </div>
-            ))}
-          </motion.div>
+            <p className="text-xs font-medium mb-4" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              Tasks
+            </p>
+            <div className="space-y-px">
+              {TASKS.map((task, i) => (
+                <motion.div
+                  key={task.title}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.12 + i * 0.04 }}
+                  className="flex items-center gap-3 py-3"
+                  style={{ borderBottom: '1px solid rgba(255,255,255,0.05)' }}
+                >
+                  {statusIcon(task.status)}
+                  <span
+                    className="flex-1 text-sm"
+                    style={{
+                      color: task.status === 'done'
+                        ? 'rgba(255,255,255,0.22)'
+                        : task.status === 'blocked'
+                        ? 'rgba(255,255,255,0.4)'
+                        : 'rgba(255,255,255,0.82)',
+                      textDecoration: task.status === 'done' ? 'line-through' : 'none',
+                    }}
+                  >
+                    {task.title}
+                  </span>
+                  {task.priority === 'high' && task.status !== 'done' && (
+                    <ArrowUp size={11} style={{ color: 'rgba(255,255,255,0.22)' }} />
+                  )}
+                </motion.div>
+              ))}
+            </div>
+          </motion.section>
 
-          {/* Captures */}
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
+          {/* Divider */}
+          <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
+
+          {/* Goals */}
+          <motion.section
+            initial={{ opacity: 0, y: 8 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-            className="md:col-span-3 rounded-2xl p-5 flex flex-col items-center justify-center gap-3 text-center"
-            style={{
-              background: `linear-gradient(135deg, rgba(249,115,22,0.07), rgba(251,146,60,0.04))`,
-              backdropFilter: 'blur(16px)',
-              border: `1px solid ${A_BORDER}`,
-              boxShadow: `inset 0 1px 0 rgba(255,255,255,0.04), 0 0 40px rgba(249,115,22,0.05)`,
-            }}
+            transition={{ duration: 0.4, delay: 0.18 }}
           >
-            <div className="w-10 h-10 rounded-2xl flex items-center justify-center"
-              style={{
-                background: `linear-gradient(135deg, rgba(249,115,22,0.2), rgba(251,146,60,0.12))`,
-                border: `1px solid ${A_BORDER}`,
-              }}>
-              <Brain size={18} weight="duotone" style={{ color: A }} />
+            <p className="text-xs font-medium mb-4" style={{ color: 'rgba(255,255,255,0.3)' }}>
+              Goals
+            </p>
+            <div className="space-y-5">
+              {GOALS.map((goal, i) => (
+                <motion.div
+                  key={goal.title}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  transition={{ delay: 0.2 + i * 0.06 }}
+                  className="space-y-2"
+                >
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm" style={{ color: 'rgba(255,255,255,0.75)' }}>
+                      {goal.title}
+                    </span>
+                    <span className="text-xs font-mono" style={{ color: 'rgba(255,255,255,0.28)' }}>
+                      {goal.progress}%
+                    </span>
+                  </div>
+                  <div className="h-px w-full rounded-full overflow-hidden" style={{ background: 'rgba(255,255,255,0.08)' }}>
+                    <motion.div
+                      initial={{ width: 0 }}
+                      animate={{ width: `${goal.progress}%` }}
+                      transition={{ duration: 0.9, delay: 0.3 + i * 0.06, ease: [0.25, 1, 0.5, 1] }}
+                      className="h-full rounded-full"
+                      style={{ background: goal.progress > 70 ? '#f97316' : 'rgba(255,255,255,0.45)' }}
+                    />
+                  </div>
+                </motion.div>
+              ))}
             </div>
-            <div>
-              <p className="text-sm font-semibold" style={{ color: '#fafaf9' }}>2 captures</p>
-              <p className="text-xs font-medium mt-0.5" style={{ color: 'rgba(168,162,158,0.4)' }}>
-                waiting to organize
-              </p>
+          </motion.section>
+
+          {/* Divider */}
+          <div style={{ height: 1, background: 'rgba(255,255,255,0.06)' }} />
+
+          {/* For You */}
+          <motion.section
+            initial={{ opacity: 0, y: 8 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: 0.24 }}
+          >
+            <div className="flex items-center gap-2 mb-4">
+              <Sparkle size={12} weight="fill" style={{ color: 'rgba(255,255,255,0.3)' }} />
+              <p className="text-xs font-medium" style={{ color: 'rgba(255,255,255,0.3)' }}>For you</p>
             </div>
-          </motion.div>
+            <div className="space-y-2">
+              {[
+                '3 tasks in progress. You have momentum.',
+                '"Launch Mitch OS v2" is at 82% — one push and it\'s done.',
+                '2 recent captures waiting to be organized.',
+              ].map((text, i) => (
+                <p key={i} className="text-sm leading-relaxed" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                  {text}
+                </p>
+              ))}
+            </div>
+          </motion.section>
 
         </div>
-      </div>
+      </main>
 
       {/* Brain button */}
       <motion.button
-        whileHover={{ scale: 1.08 }}
-        whileTap={{ scale: 0.95 }}
-        className="fixed bottom-8 right-6 z-40 w-12 h-12 rounded-full flex items-center justify-center"
+        whileHover={{ scale: 1.06 }}
+        whileTap={{ scale: 0.96 }}
+        className="fixed bottom-8 right-8 z-40 w-12 h-12 rounded-full flex items-center justify-center"
         style={{
-          background: `linear-gradient(135deg, ${A}, ${A2})`,
-          boxShadow: `0 0 24px rgba(249,115,22,0.4), 0 4px 16px rgba(0,0,0,0.4)`,
+          background: '#f97316',
+          boxShadow: '0 4px 24px rgba(249,115,22,0.3), 0 1px 4px rgba(0,0,0,0.4)',
         }}
       >
         <Brain size={20} weight="fill" className="text-white" />
