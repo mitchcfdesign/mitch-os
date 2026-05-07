@@ -10,6 +10,7 @@ import Dashboard from './dashboard/Dashboard'
 import GoalsPage from './goals/GoalsPage'
 import TasksPage from './tasks/TasksPage'
 import AssistantPage from './assistant/AssistantPage'
+import KnowledgePage from './knowledge/KnowledgePage'
 import BrainDump from './ui/BrainDump'
 
 type Mode = 'dashboard' | 'field' | 'assistant' | 'knowledge' | 'goals' | 'tasks' | 'journey'
@@ -97,7 +98,7 @@ export default function MitchOS() {
               {mode === 'assistant' && <AssistantPage />}
               {mode === 'goals' && <GoalsPage />}
               {mode === 'tasks' && <TasksPage />}
-              {mode === 'knowledge' && <Placeholder label="Knowledge Base" />}
+              {mode === 'knowledge' && <KnowledgePage />}
               {mode === 'journey' && <Placeholder label="Journey" />}
             </motion.div>
           </AnimatePresence>
