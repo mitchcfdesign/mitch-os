@@ -3,22 +3,24 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import {
-  SquaresFour, HardHat, BookOpen, Target, CheckSquare, Path,
+  SquaresFour, HardHat, BookOpen, Target, CheckSquare, Path, Lightning,
 } from '@phosphor-icons/react'
 import FieldPage from './field/FieldPage'
 import Dashboard from './dashboard/Dashboard'
 import GoalsPage from './goals/GoalsPage'
 import TasksPage from './tasks/TasksPage'
+import AssistantPage from './assistant/AssistantPage'
 import BrainDump from './ui/BrainDump'
 
-type Mode = 'dashboard' | 'field' | 'knowledge' | 'goals' | 'tasks' | 'journey'
+type Mode = 'dashboard' | 'field' | 'assistant' | 'knowledge' | 'goals' | 'tasks' | 'journey'
 
 const NAV_ITEMS: { mode: Mode; label: string; icon: React.ReactNode }[] = [
   { mode: 'dashboard', label: 'Dashboard', icon: <SquaresFour size={20} weight="fill" /> },
   { mode: 'field', label: 'Field', icon: <HardHat size={20} weight="fill" /> },
-  { mode: 'knowledge', label: 'Knowledge', icon: <BookOpen size={20} weight="fill" /> },
+  { mode: 'assistant', label: 'Ask', icon: <Lightning size={20} weight="fill" /> },
   { mode: 'goals', label: 'Goals', icon: <Target size={20} weight="fill" /> },
   { mode: 'tasks', label: 'Tasks', icon: <CheckSquare size={20} weight="fill" /> },
+  { mode: 'knowledge', label: 'Knowledge', icon: <BookOpen size={20} weight="fill" /> },
   { mode: 'journey', label: 'Journey', icon: <Path size={20} weight="fill" /> },
 ]
 
@@ -92,9 +94,10 @@ export default function MitchOS() {
             >
               {mode === 'dashboard' && <Dashboard />}
               {mode === 'field' && <FieldPage />}
-              {mode === 'knowledge' && <Placeholder label="Knowledge Base" />}
+              {mode === 'assistant' && <AssistantPage />}
               {mode === 'goals' && <GoalsPage />}
               {mode === 'tasks' && <TasksPage />}
+              {mode === 'knowledge' && <Placeholder label="Knowledge Base" />}
               {mode === 'journey' && <Placeholder label="Journey" />}
             </motion.div>
           </AnimatePresence>
