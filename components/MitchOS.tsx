@@ -7,6 +7,8 @@ import {
 } from '@phosphor-icons/react'
 import FieldPage from './field/FieldPage'
 import Dashboard from './dashboard/Dashboard'
+import GoalsPage from './goals/GoalsPage'
+import TasksPage from './tasks/TasksPage'
 import BrainDump from './ui/BrainDump'
 
 type Mode = 'dashboard' | 'field' | 'knowledge' | 'goals' | 'tasks' | 'journey'
@@ -91,8 +93,8 @@ export default function MitchOS() {
               {mode === 'dashboard' && <Dashboard />}
               {mode === 'field' && <FieldPage />}
               {mode === 'knowledge' && <Placeholder label="Knowledge Base" />}
-              {mode === 'goals' && <Placeholder label="Goals" />}
-              {mode === 'tasks' && <Placeholder label="Tasks" />}
+              {mode === 'goals' && <GoalsPage />}
+              {mode === 'tasks' && <TasksPage />}
               {mode === 'journey' && <Placeholder label="Journey" />}
             </motion.div>
           </AnimatePresence>
